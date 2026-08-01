@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC
+  "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "https://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+  <context id="taskContext" targetRuntime="MyBatis3Simple">
+    <jdbcConnection driverClass="org.h2.Driver"
+                    connectionURL="jdbc:h2:file:./build/generated-db/mybatis-generator;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE"
+                    userId="sa"
+                    password="" />
+
+    <javaModelGenerator targetPackage="com.todomanager.generated.domain"
+                        targetProject="src/main/java" />
+    <sqlMapGenerator targetPackage="mapper/generated"
+                     targetProject="src/main/resources" />
+    <javaClientGenerator targetPackage="com.todomanager.generated.infrastructure"
+                         type="XMLMAPPER"
+                         targetProject="src/main/java" />
+
+    <table tableName="tasks" />
+  </context>
+</generatorConfiguration>
