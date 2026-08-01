@@ -1,26 +1,26 @@
 ## Purpose
 
-Define a stable API contract to retrieve all TODO items so clients can render task lists without relying on internal implementation details.
+クライアントが内部実装に依存せずにタスクリストを描画できるよう、全 TODO 項目を取得するための安定した API 契約を定義する。
 
 ## ADDED Requirements
 
-### Requirement: Retrieve all TODO items
-The system SHALL provide an HTTP endpoint that returns all persisted TODO items in a single response.
+### Requirement: 全 TODO 項目を取得する
+システムは、永続化された全 TODO 項目を単一レスポンスで返す HTTP エンドポイントを SHALL 提供する。
 
-#### Scenario: Todos exist
-- **WHEN** a client sends a request to retrieve all TODO items
-- **THEN** the system returns an HTTP success response containing every TODO item
+#### Scenario: TODO が存在する
+- **WHEN** クライアントが全 TODO 項目取得リクエストを送信する
+- **THEN** システムは全 TODO 項目を含む HTTP 成功レスポンスを返す
 
-### Requirement: Return an empty collection when no TODO items exist
-The system MUST return a successful response with an empty collection when there are no persisted TODO items.
+### Requirement: TODO が存在しない場合は空の一覧を返す
+システムは、永続化された TODO 項目が存在しない場合でも、成功レスポンスとして空の一覧を MUST 返す。
 
-#### Scenario: No todos exist
-- **WHEN** a client sends a request to retrieve all TODO items and storage is empty
-- **THEN** the system returns an HTTP success response with an empty list
+#### Scenario: TODO が存在しない
+- **WHEN** クライアントが全 TODO 項目取得リクエストを送信し、ストレージが空である
+- **THEN** システムは空の一覧を含む HTTP 成功レスポンスを返す
 
-### Requirement: Include TODO item fields in the list response
-The system SHALL include each TODO item's identifier, title, and completion status in the list response payload.
+### Requirement: 一覧レスポンスに TODO 項目のフィールドを含める
+システムは、一覧レスポンスのペイロードに各 TODO 項目の identifier、title、completion status を SHALL 含める。
 
-#### Scenario: Verify response item structure
-- **WHEN** a client receives the list response
-- **THEN** each TODO item in the payload contains identifier, title, and completion status fields
+#### Scenario: レスポンス項目構造を確認する
+- **WHEN** クライアントが一覧レスポンスを受け取る
+- **THEN** ペイロード内の各 TODO 項目に identifier、title、completion status が含まれる

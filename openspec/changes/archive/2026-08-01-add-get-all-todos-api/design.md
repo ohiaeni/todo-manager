@@ -1,60 +1,60 @@
 ## Context
 
-Current task endpoints do not expose a dedicated list-all operation. See proposal.md (Why) for motivation. The codebase is a layered Spring Boot application with presentation and application layers already in place, so this change should reuse existing patterns and avoid new dependencies.
+現在のタスクエンドポイントには、一覧取得を行う専用の読み取り操作がありません。動機は proposal.md の Why を参照してください。コードベースはプレゼンテーション層とアプリケーション層を持つレイヤードな Spring Boot アプリケーションなので、この変更では既存パターンを再利用し、新しい依存関係を増やさないようにする必要があります。
 
 ## Goals / Non-Goals
 
 **Goals:**
-- Add a read-only HTTP endpoint that returns all TODO items.
-- Keep retrieval flow consistent across controller and application service boundaries.
-- Return stable list payloads for both non-empty and empty datasets.
-- Validate behavior through controller/service level tests.
+- 読み取り専用の HTTP エンドポイントを追加し、全 TODO 項目を返す。
+- コントローラとアプリケーションサービスの境界で一貫した取得フローを維持する。
+- 非空・空の両方のデータセットで安定した一覧ペイロードを返す。
+- コントローラ/サービスレベルのテストで動作を検証する。
 
 **Non-Goals:**
-- No filtering, sorting, or pagination in this change.
-- No data model redesign or persistence technology changes.
-- No authentication or authorization model changes.
+- この変更ではフィルタリング、ソート、ページネーションを行わない。
+- データモデルの再設計や永続化技術の変更は行わない。
+- 認証・認可モデルの変更は行わない。
 
 ## Decisions
 
-1. Expose a GET endpoint on the existing tasks API surface.
-- Rationale: Matches REST conventions for collection reads and minimizes client learning cost.
+1. 既存の tasks API 面に GET エンドポイントを追加する。
+- Rationale: REST のコレクション読み取りに合致し、クライアントの学習コストを下げられるため。
 - Alternatives considered:
-  - Add a POST-based search endpoint: rejected because this change has no query criteria.
-  - Reuse another existing endpoint with flags: rejected due to less clear API semantics.
+  - POST ベースの検索エンドポイントを追加する: この変更には検索条件がないため却下。
+  - 既存エンドポイントにフラグを付けて再利用する: API の意味が曖昧になるため却下。
 
-2. Implement retrieval through the existing application service layer.
-- Rationale: Preserves layering and keeps controller focused on request/response mapping.
+2. 既存のアプリケーションサービス層で取得処理を実装する。
+- Rationale: レイヤー構造を維持し、コントローラはリクエスト/レスポンス変換に集中できるため。
 - Alternatives considered:
-  - Query domain/repository directly from controller: rejected because it bypasses application orchestration.
+  - コントローラからドメイン/リポジトリを直接参照する: アプリケーションオーケストレーションをバイパスするため却下。
 
-3. Represent zero TODO items as HTTP success with an empty list.
-- Rationale: Empty collection is a valid state, not an error condition.
+3. TODO 項目が 0 件でも HTTP 成功と空一覧で返す。
+- Rationale: 空コレクションはエラーではなく妥当な状態であるため。
 - Alternatives considered:
-  - Return 404 when empty: rejected because the collection resource exists even when it has no members.
+  - 空の場合に 404 を返す: メンバーが 0 件でもコレクションリソース自体は存在するため却下。
 
-4. Keep response fields aligned with current TODO representation (identifier, title, completion status).
-- Rationale: Meets the new spec while minimizing schema drift for clients.
+4. レスポンスフィールドは現行の TODO 表現（identifier、title、completion status）に合わせる。
+- Rationale: 新しい仕様を満たしつつ、クライアントのスキーマずれを最小化できるため。
 - Alternatives considered:
-  - Introduce a new response envelope/version: rejected as unnecessary for this scoped addition.
+  - 新しいレスポンスエンベロープやバージョンを導入する: スコープ外の追加であるため却下。
 
 ## Risks / Trade-offs
 
-- [Risk] Existing tests may not cover list retrieval edge cases thoroughly.
-  - Mitigation: Add tests for non-empty and empty collection scenarios with payload assertions.
+- [Risk] 既存テストが一覧取得の境界ケースを十分に網羅していない可能性がある。
+  - Mitigation: 非空・空の両方のシナリオでペイロードアサーションを含むテストを追加する。
 
-- [Risk] Future requirements for filtering/pagination may require API evolution.
-  - Mitigation: Keep endpoint contract simple now and add query parameters in a later backward-compatible change.
+- [Risk] 将来にフィルタリング/ページネーション要件が生じる可能性がある。
+  - Mitigation: 今はシンプルな契約に留め、後方互換のある形でクエリパラメータを追加する。
 
-- [Trade-off] Returning all TODO items may become expensive as data grows.
-  - Mitigation: Document pagination as a follow-up capability if volume constraints emerge.
+- [Trade-off] TODO 項目が増えると全件取得はコストが高くなる。
+  - Mitigation: ボリューム制約が出た場合は、ページネーションを後続機能として明記する。
 
 ## Migration Plan
 
-1. Add application service method for retrieving all TODO items.
-2. Add/extend controller endpoint wiring for GET collection request.
-3. Add or update tests for success, empty response, and field structure.
-4. Run test suite and verify no behavioral regression.
+1. 全 TODO 項目を取得するアプリケーションサービスメソッドを追加する。
+2. GET コレクションリクエストに対応するコントローラのエンドポイント接続を追加・拡張する。
+3. 成功時・空レスポンス・フィールド構造を検証するテストを追加・更新する。
+4. テストスイートを実行し、振る舞いの回帰がないことを確認する。
 
 Rollback strategy:
-- Revert endpoint and service additions if regression is found; this change is additive and isolated to read paths.
+- 回帰が見つかった場合は、エンドポイントとサービスの追加分を差し戻す。これは読み取り経路に限定された付加的な変更である。

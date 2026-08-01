@@ -1,18 +1,18 @@
 ## 1. SQL Bootstrap Setup
 
-- [x] 1.1 Add schema.sql under application resources with TODO-related table definitions required by current features.
-- [x] 1.2 Add data.sql under application resources with representative TODO dummy records including identifier, title, and completion status.
-- [x] 1.3 Update local development SQL initialization configuration so schema.sql and data.sql are applied at startup.
+- [x] 1.1 アプリケーションリソース配下に、現行機能で必要な TODO 関連テーブル定義を含む schema.sql を追加する。
+- [x] 1.2 identifier、title、completion status を含む代表的なダミー TODO レコードを含む data.sql を追加する。
+- [x] 1.3 開発環境で起動時に schema.sql と data.sql が適用されるよう SQL 初期化設定を更新する。
 
 ## 2. Existing Feature Compatibility
 
-- [x] 2.1 Verify existing TODO retrieval behavior can return seeded records after startup.
-- [x] 2.2 Ensure the retrieval path remains successful with empty datasets when no seed rows are present.
-- [x] 2.3 Align seed schema and records with current TODO response contract to avoid field drift.
+- [x] 2.1 起動後にシード済みレコードを返せることを確認する。
+- [x] 2.2 シード行が存在しない空データセットでも取得パスが成功することを確認する。
+- [x] 2.3 シードスキーマとレコードが現行の TODO レスポンス契約と整合するようにする。
 
 ## 3. Verification and Documentation
 
-- [x] 3.1 Add or update tests for seeded startup behavior and retrieval response validation.
-- [x] 3.2 Add or update tests for empty-list behavior when seed rows are absent.
-- [x] 3.3 Document local dummy data usage and reset expectations for development workflow.
-- [x] 3.4 Run the project test suite and confirm no regression.
+- [x] 3.1 シード済み起動動作と取得レスポンス検証用のテストを追加・更新する。
+- [x] 3.2 シード行がない場合の空一覧動作テストを追加・更新する。
+- [x] 3.3 開発ワークフローでのダミーデータ利用とリセット方針を文書化する。
+- [x] 3.4 プロジェクトのテストスイートを実行し、回帰がないことを確認する。

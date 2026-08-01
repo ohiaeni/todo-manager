@@ -1,61 +1,61 @@
 ## Context
 
-The project now has a task retrieval API but no shared, deterministic SQL seed process for local setup. See proposal.md for motivation. The implementation should use Spring Boot SQL initialization conventions and remain scoped to development behavior without introducing production coupling.
+プロジェクトには既存のタスク取得 API がある一方で、ローカル環境向けの共有された決定的な SQL シード手順がありません。動機は proposal.md を参照してください。実装は Spring Boot の SQL 初期化規約を利用し、開発動作に限定して本番との結びつきを持たないようにする必要があります。
 
 ## Goals / Non-Goals
 
 **Goals:**
-- Define how schema.sql and data.sql are loaded in local development startup.
-- Seed TODO rows that exercise existing retrieval behavior.
-- Keep startup behavior deterministic so all developers get the same baseline records.
-- Preserve valid application behavior when seeded rows are absent.
+- ローカル開発起動時に schema.sql と data.sql をどう読み込むかを定義する。
+- 既存の取得動作を確認できる TODO レコードをシードする。
+- 開発者全員が同じ初期レコードを取得できるよう、起動動作を決定的に保つ。
+- シード行が存在しない場合でも、アプリケーションが有効な動作を維持できるようにする。
 
 **Non-Goals:**
-- No migration framework introduction in this change.
-- No production-specific seed content or operational data migration.
-- No additional domain features such as pagination/filtering for task retrieval.
+- この変更でマイグレーションフレームワークを導入しない。
+- 本番向けのシード内容や運用データ移行を行わない。
+- ページネーションやフィルタリングなど、タスク取得に関する追加ドメイン機能は実装しない。
 
 ## Decisions
 
-1. Use Spring SQL initialization resources under classpath.
-- Rationale: Built-in startup behavior is sufficient for a development bootstrap without new dependencies.
+1. クラスパス配下の Spring SQL 初期化リソースを使用する。
+- Rationale: 組み込みの起動動作で十分であり、新しい依存関係を増やさずに開発用ブートストラップを実現できるため。
 - Alternatives considered:
-  - Custom data loader component: rejected due to higher maintenance and duplicated lifecycle handling.
-  - External migration tooling in this step: rejected as out of scope for lightweight dev seeding.
+  - カスタムデータローダーコンポーネント: 追加メンテナンスとライフサイクル管理の重複があるため却下。
+  - 外部マイグレーションツールの使用: 軽量な開発シードには過剰であるため却下。
 
-2. Model seed data around current TODO response fields.
-- Rationale: Existing API relies on identifier, title, and completion status, so seeded records must include all three fields.
+2. シードデータは現行の TODO レスポンスフィールドに合わせる。
+- Rationale: 既存 API は identifier、title、completion status に依存しているため、シードレコードもこれらを含める必要があるため。
 - Alternatives considered:
-  - Minimal title-only seed rows: rejected because it cannot validate full existing response structure.
+  - タイトルのみの最小シード行: 既存レスポンス構造全体を検証できないため却下。
 
-3. Keep initialization behavior compatible with empty-dataset runs.
-- Rationale: Developers may clear rows during debugging, and existing retrieval should still return success with an empty list.
+3. 空データセットでも初期化できるようにする。
+- Rationale: 開発者がデバッグ中に行を削除しても、既存取得処理は成功した空一覧を返せるようにするため。
 - Alternatives considered:
-  - Force mandatory non-empty inserts each startup: rejected because it blocks empty-path verification.
+  - 起動ごとに必ず非空データを挿入する: 空パス検証を妨げるため却下。
 
-4. Document local-environment intent in configuration.
-- Rationale: Prevent accidental assumption that the same seed strategy is for production.
+4. 設定に開発環境向けの意図を明示する。
+- Rationale: 同じシード戦略が本番でも使用されると誤解されるため。
 - Alternatives considered:
-  - No explicit environment intent: rejected due to ambiguity and potential misuse.
+  - 明示的な環境意図を付けない: 曖昧さが残り、誤用のリスクがあるため却下。
 
 ## Risks / Trade-offs
 
-- [Risk] schema.sql structure may drift from runtime entity expectations.
-  - Mitigation: Keep schema definitions aligned with current domain fields and add startup validation in tests.
+- [Risk] schema.sql の構造が実行時エンティティの期待値とズレる可能性がある。
+  - Mitigation: スキーマ定義を現行ドメインフィールドに合わせ、テストで起動検証を行う。
 
-- [Risk] Seed records could become stale as existing features evolve.
-  - Mitigation: Maintain seed rows as part of feature updates that change required API fields.
+- [Risk] 既存機能の進化に合わせてシードレコードが古くなる可能性がある。
+  - Mitigation: 必須 API フィールドが変わる変更では、シード内容も合わせて更新する。
 
-- [Trade-off] SQL seed setup improves predictability but adds startup data conventions developers must remember.
-  - Mitigation: Document behavior in README/developer notes and include straightforward reset guidance.
+- [Trade-off] SQL シード構成は予測可能性を高める一方、開発者が起動データ規約を覚えておく必要がある。
+  - Mitigation: README/開発メモに動作を明記し、簡単なリセット手順を用意する。
 
 ## Migration Plan
 
-1. Add schema.sql with TODO-related table definitions for local startup.
-2. Add data.sql with representative dummy TODO rows for existing retrieval behavior.
-3. Add or adjust configuration so SQL init behavior is active in development as intended.
-4. Add/update tests that verify seeded and empty-state retrieval behavior.
-5. Verify startup and API behavior in local run and test execution.
+1. ローカル起動用に TODO 関連テーブル定義を含む schema.sql を追加する。
+2. 既存取得動作を確認できる代表的なダミー TODO 行を含む data.sql を追加する。
+3. 開発環境で SQL 初期化が有効になるよう設定を追加・調整する。
+4. シード済み・空状態の取得動作を検証するテストを追加・更新する。
+5. ローカル実行とテスト実行で起動・API 動作を確認する。
 
 Rollback strategy:
-- Revert schema/data SQL resources and related configuration changes, returning to the previous no-seed startup behavior.
+- schema/data の SQL リソースと関連設定を差し戻し、シードなしの従来状態に戻す。

@@ -1,34 +1,34 @@
 # dev-sql-seed-bootstrap Specification
 
 ## Purpose
-Define a consistent development bootstrap behavior so local environments can start with schema.sql and data.sql and immediately exercise existing TODO features.
+ローカル環境で schema.sql と data.sql を使って開発用データを一貫して投入し、既存の TODO 機能をすぐに確認できるようにする。
 
 ## Requirements
 
-### Requirement: Development schema bootstrap from schema.sql
-The system SHALL initialize required development tables from schema.sql during local application startup when SQL initialization is enabled.
+### Requirement: schema.sql から開発用スキーマを初期化する
+システムは、SQL 初期化が有効な開発環境で起動時に schema.sql を読み込み、必要な TODO 関連テーブルを作成することを SHALL 満たす。
 
-#### Scenario: Schema is created on startup
-- **WHEN** the development environment starts with SQL initialization enabled
-- **THEN** the required TODO-related tables are created from schema.sql
+#### Scenario: 起動時にスキーマを作成する
+- **WHEN** SQL 初期化が有効な開発環境が起動する
+- **THEN** schema.sql に基づいて必要な TODO 関連テーブルが作成される
 
-### Requirement: Development dummy data bootstrap from data.sql
-The system SHALL load development dummy data from data.sql after schema initialization for local startup.
+### Requirement: data.sql から開発用ダミーデータを読み込む
+システムは、スキーマ初期化後に data.sql から開発用ダミーデータを読み込み、ローカル起動時に利用可能にすることを SHALL 満たす。
 
-#### Scenario: Dummy data is inserted on startup
-- **WHEN** the development environment starts with schema.sql and data.sql present
-- **THEN** predefined TODO records are inserted and available for existing features
+#### Scenario: 起動時にダミーデータを投入する
+- **WHEN** schema.sql と data.sql が存在する開発環境が起動する
+- **THEN** 既定の TODO レコードが投入され、既存機能で利用できる
 
-### Requirement: Dummy data covers existing TODO feature usage
-The system MUST provide dummy TODO records that include identifier, title, and completion status values used by the current task retrieval behavior.
+### Requirement: ダミーデータは既存の TODO 機能利用に十分である
+システムは、現在のタスク取得動作で利用される identifier、title、completion status を含むダミー TODO レコードを MUST 提供する。
 
-#### Scenario: Existing feature can run with seeded data
-- **WHEN** a developer calls the existing TODO retrieval endpoint after startup
-- **THEN** the response can return seeded TODO items with identifier, title, and completion status fields
+#### Scenario: 初期化済みデータで既存機能を実行できる
+- **WHEN** 開発者が起動後に既存の TODO 取得エンドポイントを呼び出す
+- **THEN** シード済みの TODO 項目を identifier、title、completion status を含めて返すことができる
 
-### Requirement: Empty result remains valid after data reset
-The system MUST allow development startup with no seeded rows and still keep TODO retrieval behavior valid by returning an empty collection.
+### Requirement: データをリセットしたあとも空結果は有効である
+システムは、シード行が存在しない開発起動でも、空の一覧レスポンスを返すことで TODO 取得動作が有効であることを MUST 維持する。
 
-#### Scenario: Seed rows are removed
-- **WHEN** data.sql inserts no TODO rows or the seeded rows are cleared
-- **THEN** the TODO retrieval behavior remains successful with an empty list response
+#### Scenario: シード行を削除する
+- **WHEN** data.sql に TODO 行が存在しない、またはシード行がクリアされる
+- **THEN** TODO 取得動作は成功し、空の一覧レスポンスを返す

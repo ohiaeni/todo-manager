@@ -1,24 +1,24 @@
 ## Why
 
-Current task APIs do not provide a single endpoint to retrieve all TODO items, which makes basic list views and integrations harder to implement. Adding a dedicated list API now enables clients to load and display the full TODO collection with a stable contract.
+現在のタスク API には、全 TODO 項目を取得する単一エンドポイントがなく、基本的な一覧表示や連携実装が難しくなっています。専用の一覧取得 API を追加することで、クライアントは安定した契約で TODO コレクションを読み込めるようになります。
 
 ## What Changes
 
-- Add a new API endpoint to fetch all TODO items.
-- Define the response behavior for empty and non-empty TODO collections.
-- Ensure application and presentation layers expose a consistent list retrieval flow.
-- Add or update tests for successful retrieval and response shape.
+- 全 TODO 項目を取得する新規 API エンドポイントを追加する。
+- 空の TODO コレクションと非空の TODO コレクションに対するレスポンス動作を定義する。
+- アプリケーション層とプレゼンテーション層で一貫した一覧取得フローを提供する。
+- 成功時の取得動作とレスポンス構造を検証するテストを追加・更新する。
 
 ## Capabilities
 
 ### New Capabilities
-- `todo-listing-api`: Provide a REST API contract for retrieving all TODO items.
+- `todo-listing-api`: 全 TODO 項目を取得するための REST API 契約を提供する。
 
 ### Modified Capabilities
 - None.
 
 ## Impact
 
-- Affected API surface: task-related HTTP endpoints.
-- Affected code areas: presentation controller, application service, and related domain retrieval logic.
-- Affected tests: controller/service tests for list retrieval behavior and payload structure.
+- 影響する API 面: タスク関連の HTTP エンドポイント。
+- 影響するコード領域: プレゼンテーションコントローラ、アプリケーションサービス、関連するドメイン取得ロジック。
+- 影響するテスト: 一覧取得動作とペイロード構造を検証するコントローラ/サービステスト。

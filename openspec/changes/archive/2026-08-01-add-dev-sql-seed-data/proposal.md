@@ -1,24 +1,24 @@
 ## Why
 
-The project currently lacks a repeatable SQL-based setup for local development data, making verification of existing features dependent on ad-hoc manual input. Adding standard schema.sql and data.sql support now will make development and testing more predictable across team members.
+プロジェクトには、ローカル開発データを再現可能にする SQL ベースの初期化手順がなく、既存機能の検証が手作業に依存しています。ここで標準的な schema.sql と data.sql のサポートを追加することで、開発・テストの再現性をチーム全体で高めます。
 
 ## What Changes
 
-- Add support for SQL bootstrap files used by the local development environment.
-- Define requirements for schema creation and development-only dummy data provisioning.
-- Ensure dummy data covers already implemented TODO-related features so existing endpoints can be exercised immediately after startup.
-- Define expected behavior when seed data is present and when data is reset.
+- ローカル開発環境で利用する SQL 初期化ファイルのサポートを追加する。
+- スキーマ作成と開発専用のダミーデータ投入要件を定義する。
+- 既存の TODO 関連機能を起動直後に確認できるよう、ダミーデータが既存エンドポイントの動作をカバーするようにする。
+- シードデータが存在する場合と、データをリセットした場合の期待動作を明確にする。
 
 ## Capabilities
 
 ### New Capabilities
-- `dev-sql-seed-bootstrap`: Provide a stable behavior contract for initializing schema and dummy data through schema.sql and data.sql in development setup.
+- `dev-sql-seed-bootstrap`: 開発環境で schema.sql と data.sql を通じてスキーマとダミーデータを初期化するための安定した振る舞い契約を提供する。
 
 ### Modified Capabilities
 - None.
 
 ## Impact
 
-- Affected systems: application startup data initialization path for local environments.
-- Affected code/config: SQL bootstrap resources, data source initialization settings, and related startup conventions.
-- Affected usage: developers can run the app with pre-seeded records that support existing TODO listing behavior checks.
+- 影響対象: ローカル環境におけるアプリケーション起動時のデータ初期化経路。
+- 影響するコード/設定: SQL 初期化リソース、データソース初期化設定、関連する起動規約。
+- 影響する利用方法: 開発者は、既存の TODO 一覧動作確認に必要なシード済みレコードを持った状態でアプリを起動できる。
