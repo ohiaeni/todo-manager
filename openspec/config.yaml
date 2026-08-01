@@ -3,21 +3,27 @@ schema: spec-driven
 # Project context (optional)
 # This is shown to AI when creating artifacts.
 # Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+context: |
+  Tech stack: Java, Spring Boot, Gradle.
+  This project uses Japanese for all OpenSpec artifacts.
+  Keep proposal, spec, design, and tasks content entirely in Japanese, including headings, labels, and scenario descriptions.
+  Avoid English section titles and English-only terminology in generated artifacts.
 
 # Per-artifact rules (optional)
 # Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+rules:
+  proposal:
+    - Write the entire proposal in Japanese.
+    - Do not leave English headings or labels.
+  spec:
+    - Write the entire spec in Japanese.
+    - Keep requirement names, scenario names, and acceptance text in Japanese.
+  design:
+    - Write the entire design in Japanese.
+    - Keep section headings, decisions, risks, and migration notes in Japanese.
+  tasks:
+    - Write the entire tasks document in Japanese.
+    - Keep checklist text and task descriptions in Japanese.
 
 # Per-operation guidance (optional)
 # Add advisory guidance for how apply and archive work should be conducted.
