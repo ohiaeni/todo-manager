@@ -19,6 +19,8 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webmvc:4.1.0'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc:4.1.0'
+    runtimeOnly 'com.h2database:h2'
 
     annotationProcessor 'org.projectlombok:lombok'
     compileOnly 'org.projectlombok:lombok'
