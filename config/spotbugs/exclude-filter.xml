@@ -1,3 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FindBugsFilter>
+	<!-- MyBatis 生成コードは対象外とする -->
+	<Match>
+		<Class name="~com\\.todomanager\\.generated\\..*"/>
+	</Match>
+
+	<!-- SQL 生成定数クラスは生成コード由来のため対象外とする -->
+	<Match>
+		<Class name="com.todomanager.generated.domain.Tasks"/>
+	</Match>
 </FindBugsFilter>

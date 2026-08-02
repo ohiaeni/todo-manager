@@ -6,13 +6,11 @@
 
 <suppressions>
   <!-- 自動生成クラスはチェックしない -->
-  <suppress checks=".*" files="com[\\/]dressca[\\/]infrastructure[\\/]repository[\\/]mybatis[\\/]generated"/>
+  <suppress checks=".*" files="com[\\/]todomanager[\\/]generated[\\/].*"/>
   <!-- テストクラスのメソッド名はチェックしない（日本語を使用するため） -->
   <suppress checks="MethodName" files=".*Test.java$"/>
   <!-- テストクラスのメソッド名はチェックしない（英語の略語を使用するため） -->
   <suppress checks="AbbreviationAsWordInName" files=".*Test.java$"/>
   <!-- テストクラスでは汎用的な例外のキャッチを禁止しない -->
   <suppress checks="IllegalCatch" files=".*Test.java$"/>
-  <!-- バッチジョブの設定クラスのメソッド名はチェックしない -->
-  <suppress checks="MethodName" files="com[\\/]dressca[\\/]batch[\\/]job[\\/]BatchConfiguration.java$"/>
 </suppressions>

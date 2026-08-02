@@ -3,6 +3,8 @@ plugins {
     id 'org.springframework.boot' version '4.1.0'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'jacoco'
+    id 'checkstyle'
+    id 'com.github.spotbugs' version '6.5.9'
 }
 
 group = 'com'
@@ -16,6 +18,17 @@ java {
 
 repositories {
     mavenCentral()
+}
+
+checkstyle {
+    toolVersion = '13.9.0'
+    configFile = file('../config/checkstyle/checkstyle.xml')
+    configDirectory = file('../config/checkstyle')
+}
+
+spotbugs {
+    toolVersion = '4.10.3'
+    excludeFilter = file('../config/spotbugs/exclude-filter.xml')
 }
 
 dependencies {
@@ -51,6 +64,25 @@ tasks.named('jacocoTestReport') {
         xml.required = true
         html.required = true
     }
+}
+
+tasks.withType(Checkstyle).configureEach {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+tasks.withType(com.github.spotbugs.snom.SpotBugsTask).configureEach {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+tasks.named('check') {
+    dependsOn tasks.named('spotbugsMain')
+    dependsOn tasks.named('spotbugsTest')
 }
 
 tasks.register('generateMyBatisArtifacts', JavaExec) {

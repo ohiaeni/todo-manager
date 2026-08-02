@@ -38,3 +38,19 @@
 - 空シード検証: `empty-seed` プロファイル（`src/test/resources/application-empty-seed.properties`）
 
 これにより、ローカル環境でも追加の手作業設定なしで API 起点の結合テストを再現できます。
+
+## 静的解析の標準手順
+
+`config` 配下の設定を使って、Gradle と VS Code の両方で同じ基準の静的解析を行えます。
+
+- 実行コマンド: `cd todomanager && ./gradlew check`
+- 主なレポート出力先:
+	- Checkstyle（main）: `todomanager/build/reports/checkstyle/main.html`
+	- Checkstyle（test）: `todomanager/build/reports/checkstyle/test.html`
+	- SpotBugs（main）: `todomanager/build/reports/spotbugs/main.html`
+	- SpotBugs（test）: `todomanager/build/reports/spotbugs/test.html`
+
+### 補足
+
+- VS Code は `config/checkstyle/checkstyle.xml` を参照します。
+- SpotBugs は Java 25 環境でも `./gradlew check` の実行フローで有効化されています。
