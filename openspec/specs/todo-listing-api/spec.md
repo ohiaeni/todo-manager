@@ -6,22 +6,22 @@
 ## Requirements
 
 ### Requirement: 全 TODO 項目を取得する
-システムは、永続化された全 TODO 項目を単一レスポンスで返す HTTP エンドポイントを SHALL 提供する。
+システムは、認証済みユーザーのコンテキストに紐づく TODO 項目のみを単一レスポンスで返す HTTP エンドポイントを MUST 提供する。
 
-#### Scenario: TODO が存在する
-- **WHEN** クライアントが全 TODO 項目取得リクエストを送信する
-- **THEN** システムは全 TODO 項目を含む HTTP 成功レスポンスを返す
+#### Scenario: 自分の TODO が存在する
+- 認証済みユーザーが TODO 項目取得リクエストを送信した場合
+- システムは当該ユーザーに紐づく TODO 項目のみを含む HTTP 成功レスポンスを返すこと
 
 ### Requirement: TODO が存在しない場合は空の一覧を返す
-システムは、永続化された TODO 項目が存在しない場合でも、成功レスポンスとして空の一覧を MUST 返す。
+システムは、認証済みユーザーに紐づく TODO 項目が存在しない場合でも、成功レスポンスとして空の一覧を MUST 返す。
 
-#### Scenario: TODO が存在しない
-- **WHEN** クライアントが全 TODO 項目取得リクエストを送信し、ストレージが空である
-- **THEN** システムは空の一覧を含む HTTP 成功レスポンスを返す
+#### Scenario: 自分の TODO が存在しない
+- 認証済みユーザーが TODO 項目取得リクエストを送信し、当該ユーザーのストレージが空である場合
+- システムは空の一覧を含む HTTP 成功レスポンスを返すこと
 
 ### Requirement: 一覧レスポンスに TODO 項目のフィールドを含める
-システムは、一覧レスポンスのペイロードに各 TODO 項目の identifier、title、completion status を SHALL 含める。
+システムは、一覧レスポンスのペイロードに各 TODO 項目の identifier、title、completion status を MUST 含める。
 
 #### Scenario: レスポンス項目構造を確認する
-- **WHEN** クライアントが一覧レスポンスを受け取る
-- **THEN** ペイロード内の各 TODO 項目に identifier、title、completion status が含まれる
+- 認証済みユーザーが一覧レスポンスを受け取った場合
+- ペイロード内の各 TODO 項目に identifier、title、completion status が含まれること
