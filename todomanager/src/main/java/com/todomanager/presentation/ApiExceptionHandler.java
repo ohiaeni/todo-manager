@@ -11,21 +11,21 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
-    @ExceptionHandler({ IllegalArgumentException.class, MissingRequestHeaderException.class })
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleBadRequest(Exception exception) {
-        return new ErrorResponse(exception.getMessage());
-    }
+  @ExceptionHandler({IllegalArgumentException.class, MissingRequestHeaderException.class})
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ErrorResponse handleBadRequest(Exception exception) {
+    return new ErrorResponse(exception.getMessage());
+  }
 
-    @ExceptionHandler(TaskOwnershipException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ErrorResponse handleTaskOwnership(TaskOwnershipException exception) {
-        return new ErrorResponse(exception.getMessage());
-    }
+  @ExceptionHandler(TaskOwnershipException.class)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  public ErrorResponse handleTaskOwnership(TaskOwnershipException exception) {
+    return new ErrorResponse(exception.getMessage());
+  }
 
-    @ExceptionHandler(TaskNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleTaskNotFound(TaskNotFoundException exception) {
-        return new ErrorResponse(exception.getMessage());
-    }
+  @ExceptionHandler(TaskNotFoundException.class)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  public ErrorResponse handleTaskNotFound(TaskNotFoundException exception) {
+    return new ErrorResponse(exception.getMessage());
+  }
 }

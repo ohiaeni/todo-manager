@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
 public class UserRegistrationController {
-    private final UserRegistrationService userRegistrationService;
+  private final UserRegistrationService userRegistrationService;
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserRegistrationResponse register(@RequestBody UserRegistrationRequest request) {
-        return userRegistrationService.register(request);
-    }
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public UserRegistrationResponse register(@RequestBody UserRegistrationRequest request) {
+    return userRegistrationService.register(request);
+  }
 }

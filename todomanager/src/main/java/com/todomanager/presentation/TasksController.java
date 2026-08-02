@@ -22,35 +22,30 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/tasks")
 public class TasksController {
-    private final TasksApplicationService tasksApplicationService;
+  private final TasksApplicationService tasksApplicationService;
 
-    @GetMapping
-    public List<TaskResponse> getTasks(@RequestHeader("X-User-Id") Long userId) {
-        return tasksApplicationService.getTasks(userId);
-    }
+  @GetMapping
+  public List<TaskResponse> getTasks(@RequestHeader("X-User-Id") Long userId) {
+    return tasksApplicationService.getTasks(userId);
+  }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public TaskResponse createTask(
-            @RequestHeader("X-User-Id") Long userId,
-            @RequestBody TaskCreateRequest request) {
-        return tasksApplicationService.createTask(userId, request);
-    }
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public TaskResponse createTask(@RequestHeader("X-User-Id") Long userId,
+      @RequestBody TaskCreateRequest request) {
+    return tasksApplicationService.createTask(userId, request);
+  }
 
-    @PutMapping("/{taskId}")
-    public TaskResponse updateTask(
-            @RequestHeader("X-User-Id") Long userId,
-            @PathVariable Long taskId,
-            @RequestBody TaskUpdateRequest request) {
-        return tasksApplicationService.updateTask(userId, taskId, request);
-    }
+  @PutMapping("/{taskId}")
+  public TaskResponse updateTask(@RequestHeader("X-User-Id") Long userId, @PathVariable Long taskId,
+      @RequestBody TaskUpdateRequest request) {
+    return tasksApplicationService.updateTask(userId, taskId, request);
+  }
 
-    @DeleteMapping("/{taskId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTask(
-            @RequestHeader("X-User-Id") Long userId,
-            @PathVariable Long taskId) {
-        tasksApplicationService.deleteTask(userId, taskId);
-    }
+  @DeleteMapping("/{taskId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteTask(@RequestHeader("X-User-Id") Long userId, @PathVariable Long taskId) {
+    tasksApplicationService.deleteTask(userId, taskId);
+  }
 
 }
