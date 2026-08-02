@@ -1,0 +1,9 @@
+{
+  "ignorePaths": [
+    "checkstyle.xml",
+    "eclipse-formatter.xml",
+    "**/gradlew",
+    "**/gradlew.bat"
+  ],
+  "words": []
+}
