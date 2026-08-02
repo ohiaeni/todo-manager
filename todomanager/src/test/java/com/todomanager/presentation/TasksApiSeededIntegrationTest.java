@@ -1,27 +1,41 @@
 package com.todomanager.presentation;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.todomanager.application.TaskResponse;
-import com.todomanager.application.TasksApplicationService;
-import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
-@SpringBootTest(properties = {
-        "spring.datasource.url=jdbc:h2:mem:todomanager-seeded;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE"
-})
+@SpringBootTest
+@WebAppConfiguration
+@ActiveProfiles("integrationtest")
 class TasksApiSeededIntegrationTest {
 
     @Autowired
-    private TasksApplicationService tasksApplicationService;
+    private WebApplicationContext context;
+
+    private MockMvc mockMvc;
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+    }
 
     @Test
-    void returnsSeededTasksFromSqlInitialization() throws Exception {
-        List<TaskResponse> tasks = tasksApplicationService.getTasks(1L);
-
-        assertThat(tasks).hasSize(2);
-        assertThat(tasks.get(0)).isEqualTo(new TaskResponse(1L, "Buy groceries", false));
+    void returnsSeededTasksFromEndpoint() throws Exception {
+        mockMvc.perform(get("/api/v1/tasks").header("X-User-Id", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].title").value("Buy groceries"))
+                .andExpect(jsonPath("$[0].completed").value(false));
     }
 }

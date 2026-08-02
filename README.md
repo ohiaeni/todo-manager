@@ -22,3 +22,19 @@
 
 - テストでは [todomanager/src/test/resources/data-empty.sql](todomanager/src/test/resources/data-empty.sql) を使い、空データ状態を検証します。
 - ローカルで空状態を確認したい場合は、`data.sql` の INSERT を外すか `DELETE FROM tasks;` のみ残して起動してください。
+
+## テスト実行の標準手順
+
+本リポジトリでは、単体テストと結合テストを同じコマンドで実行できます。
+
+- 実行コマンド: `cd todomanager && ./gradlew test`
+- レポート:
+	- テスト結果: `todomanager/build/reports/tests/test/index.html`
+	- カバレッジ: `todomanager/build/reports/jacoco/test/html/index.html`
+
+### テスト用プロファイル
+
+- 通常の統合テスト: `integrationtest` プロファイル（`src/test/resources/application-integrationtest.properties`）
+- 空シード検証: `empty-seed` プロファイル（`src/test/resources/application-empty-seed.properties`）
+
+これにより、ローカル環境でも追加の手作業設定なしで API 起点の結合テストを再現できます。

@@ -56,6 +56,18 @@ class TasksApplicationServiceTest {
     }
 
     @Test
+    void trimsTitleAndDefaultsCompletedOnCreate() {
+        TaskRepository repository = mock(TaskRepository.class);
+        when(repository.create(1L, "Trim me", false)).thenReturn(new Task(11L, 1L, "Trim me", false));
+        TasksApplicationService service = new TasksApplicationService(repository);
+
+        TaskResponse response = service.createTask(1L, new TaskCreateRequest("  Trim me  ", null));
+
+        verify(repository).create(1L, "Trim me", false);
+        assertThat(response).isEqualTo(new TaskResponse(11L, "Trim me", false));
+    }
+
+    @Test
     void updatesTaskForUser() {
         TaskRepository repository = mock(TaskRepository.class);
         when(repository.update(1L, 2L, "Updated", true)).thenReturn(new Task(2L, 1L, "Updated", true));
@@ -64,6 +76,18 @@ class TasksApplicationServiceTest {
         TaskResponse response = service.updateTask(1L, 2L, new TaskUpdateRequest("Updated", true));
 
         assertThat(response).isEqualTo(new TaskResponse(2L, "Updated", true));
+    }
+
+    @Test
+    void trimsTitleOnUpdate() {
+        TaskRepository repository = mock(TaskRepository.class);
+        when(repository.update(1L, 2L, "Updated title", true)).thenReturn(new Task(2L, 1L, "Updated title", true));
+        TasksApplicationService service = new TasksApplicationService(repository);
+
+        TaskResponse response = service.updateTask(1L, 2L, new TaskUpdateRequest("  Updated title  ", true));
+
+        verify(repository).update(1L, 2L, "Updated title", true);
+        assertThat(response).isEqualTo(new TaskResponse(2L, "Updated title", true));
     }
 
     @Test
@@ -94,6 +118,16 @@ class TasksApplicationServiceTest {
         assertThatThrownBy(() -> service.updateTask(1L, 1L, new TaskUpdateRequest("title", null)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("completed");
+    }
+
+    @Test
+    void rejectsInvalidTaskIdOnUpdate() {
+        TaskRepository repository = mock(TaskRepository.class);
+        TasksApplicationService service = new TasksApplicationService(repository);
+
+        assertThatThrownBy(() -> service.updateTask(1L, 0L, new TaskUpdateRequest("title", true)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("taskId");
     }
 
     @Test

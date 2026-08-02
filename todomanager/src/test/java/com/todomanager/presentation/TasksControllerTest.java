@@ -1,6 +1,7 @@
 package com.todomanager.presentation;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -12,6 +13,8 @@ import com.todomanager.application.TaskCreateRequest;
 import com.todomanager.application.TaskResponse;
 import com.todomanager.application.TaskUpdateRequest;
 import com.todomanager.application.TasksApplicationService;
+import com.todomanager.domain.TaskNotFoundException;
+import com.todomanager.domain.TaskOwnershipException;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +36,7 @@ class TasksControllerTest {
 
     @Test
     void returnsTasksWithExpectedFields() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(tasksController).build();
+        MockMvc mockMvc = buildMockMvc();
 
         given(tasksApplicationService.getTasks(1L)).willReturn(List.of(
                 new TaskResponse(1L, "Buy milk", false),
@@ -51,7 +54,7 @@ class TasksControllerTest {
 
     @Test
     void returnsEmptyArrayWhenNoTasksExist() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(tasksController).build();
+        MockMvc mockMvc = buildMockMvc();
 
         given(tasksApplicationService.getTasks(1L)).willReturn(List.of());
 
@@ -63,7 +66,7 @@ class TasksControllerTest {
 
     @Test
     void createsTaskAndReturnsCreatedResponse() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(tasksController).build();
+        MockMvc mockMvc = buildMockMvc();
 
         TaskCreateRequest request = new TaskCreateRequest("Write tests", false);
         given(tasksApplicationService.createTask(1L, request))
@@ -81,7 +84,7 @@ class TasksControllerTest {
 
     @Test
     void updatesTaskAndReturnsUpdatedResponse() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(tasksController).build();
+        MockMvc mockMvc = buildMockMvc();
 
         TaskUpdateRequest request = new TaskUpdateRequest("Refactor", true);
         given(tasksApplicationService.updateTask(1L, 2L, request))
@@ -99,9 +102,49 @@ class TasksControllerTest {
 
     @Test
     void deletesTaskAndReturnsNoContent() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(tasksController).build();
+        MockMvc mockMvc = buildMockMvc();
 
         mockMvc.perform(delete("/api/v1/tasks/2").header("X-User-Id", "1"))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void returnsBadRequestWhenHeaderIsMissing() throws Exception {
+        MockMvc mockMvc = buildMockMvc();
+
+        mockMvc.perform(get("/api/v1/tasks"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").exists());
+    }
+
+    @Test
+    void returnsNotFoundWhenTaskDoesNotExist() throws Exception {
+        MockMvc mockMvc = buildMockMvc();
+        willThrow(new TaskNotFoundException(99L)).given(tasksApplicationService)
+                .updateTask(1L, 99L, new TaskUpdateRequest("missing", false));
+
+        mockMvc.perform(put("/api/v1/tasks/99")
+                .header("X-User-Id", "1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"title\":\"missing\",\"completed\":false}"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Task not found: 99"));
+    }
+
+    @Test
+    void returnsForbiddenWhenTaskBelongsToAnotherUser() throws Exception {
+        MockMvc mockMvc = buildMockMvc();
+        willThrow(new TaskOwnershipException(2L, 1L)).given(tasksApplicationService)
+                .deleteTask(1L, 2L);
+
+        mockMvc.perform(delete("/api/v1/tasks/2").header("X-User-Id", "1"))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.message").value("Task 2 does not belong to user 1"));
+    }
+
+    private MockMvc buildMockMvc() {
+        return MockMvcBuilders.standaloneSetup(tasksController)
+                .setControllerAdvice(new ApiExceptionHandler())
+                .build();
     }
 }
