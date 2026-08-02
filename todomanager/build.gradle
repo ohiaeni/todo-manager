@@ -97,7 +97,6 @@ tasks.register('generateMyBatisArtifacts', JavaExec) {
         dbDir.mkdirs()
         def dbFile = new File(dbDir, 'mybatis-generator.mv.db')
         if (!dbFile.exists()) {
-            def sql = file('src/main/resources/generator/init-schema.sql').text
             def process = ['java', '-cp', sourceSets.main.runtimeClasspath.asPath, 'org.h2.tools.RunScript', '-url', 'jdbc:h2:file:./build/generated-db/mybatis-generator;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE', '-user', 'sa', '-password', '', '-script', 'src/main/resources/generator/init-schema.sql'].execute()
             process.waitForProcessOutput(System.out, System.err)
             if (process.exitValue() != 0) {
