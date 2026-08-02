@@ -12,6 +12,14 @@
     "assertj",
     "mybatis",
     "ibatis",
-    "hamcrest"
+    "hamcrest",
+    "spotbugs",
+    "projectlombok",
+    "jacoco",
+    "webmvc",
+    "snom",
+    "configfile",
+    "mkdirs",
+    "gradlew"
   ]
 }
