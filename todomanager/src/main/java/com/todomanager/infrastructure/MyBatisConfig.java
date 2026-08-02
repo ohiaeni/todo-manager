@@ -9,9 +9,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
+/**
+ * MyBatisの設定を行うクラスです。
+ */
 @Configuration
 @MapperScan("com.todomanager.infrastructure")
 public class MyBatisConfig {
+  /**
+   * SqlSessionFactoryを生成するためのBeanを定義します。
+   * 
+   * @param dataSource データソース
+   * @return SqlSessionFactory
+   * @throws Exception 生成に失敗した場合
+   */
   @Bean
   public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
     SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
@@ -27,6 +37,12 @@ public class MyBatisConfig {
     return factoryBean.getObject();
   }
 
+  /**
+   * SqlSessionTemplateを生成するためのBeanを定義します。
+   * 
+   * @param sqlSessionFactory SqlSessionFactory
+   * @return SqlSessionTemplate
+   */
   @Bean
   public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
     return new SqlSessionTemplate(sqlSessionFactory);

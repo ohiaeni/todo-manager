@@ -20,25 +20,25 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @ExtendWith(MockitoExtension.class)
 class UserRegistrationControllerTest {
 
-    @Mock
-    private UserRegistrationService userRegistrationService;
+  @Mock
+  private UserRegistrationService userRegistrationService;
 
-    @InjectMocks
-    private UserRegistrationController userRegistrationController;
+  @InjectMocks
+  private UserRegistrationController userRegistrationController;
 
-    @Test
-    void registersUserAndReturnsCreatedResponse() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userRegistrationController).build();
+  @Test
+  void registersUserAndReturnsCreatedResponse() throws Exception {
+    MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userRegistrationController).build();
 
-        given(userRegistrationService.register(new UserRegistrationRequest("alice", "alice@example.com")))
-                .willReturn(new UserRegistrationResponse(1L, "alice", "alice@example.com"));
+    given(
+        userRegistrationService.register(new UserRegistrationRequest("alice", "alice@example.com")))
+            .willReturn(new UserRegistrationResponse(1L, "alice", "alice@example.com"));
 
-        mockMvc.perform(post("/api/v1/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\":\"alice\",\"email\":\"alice@example.com\"}"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.username").value("alice"))
-                .andExpect(jsonPath("$.email").value("alice@example.com"));
-    }
+    mockMvc
+        .perform(post("/api/v1/users").contentType(MediaType.APPLICATION_JSON)
+            .content("{\"username\":\"alice\",\"email\":\"alice@example.com\"}"))
+        .andExpect(status().isCreated()).andExpect(jsonPath("$.id").value(1))
+        .andExpect(jsonPath("$.username").value("alice"))
+        .andExpect(jsonPath("$.email").value("alice@example.com"));
+  }
 }

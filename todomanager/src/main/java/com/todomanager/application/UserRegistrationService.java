@@ -5,11 +5,20 @@ import com.todomanager.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * ユーザー登録に関するアプリケーションサービスです。
+ */
 @Service
 @RequiredArgsConstructor
 public class UserRegistrationService {
   private final UserRepository userRepository;
 
+  /**
+   * 新しいユーザーを登録します。
+   * 
+   * @param request ユーザー登録リクエストデータ
+   * @return ユーザー登録レスポンスデータ
+   */
   public UserRegistrationResponse register(UserRegistrationRequest request) {
     validateRequest(request);
 

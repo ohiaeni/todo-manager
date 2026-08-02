@@ -7,17 +7,33 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * タスクに関するアプリケーションサービスです。
+ */
 @Service
 @RequiredArgsConstructor
 public class TasksApplicationService {
   private final TaskRepository taskRepository;
 
+  /**
+   * 指定されたユーザーIDに関連するタスクのリストを取得します。
+   * 
+   * @param userId ユーザーID
+   * @return タスクのレスポンスデータのリスト
+   */
   public List<TaskResponse> getTasks(Long userId) {
     validateUserId(userId);
     return taskRepository.findByUserId(userId).stream().map(this::toResponse)
         .collect(Collectors.toList());
   }
 
+  /**
+   * 指定されたユーザーIDに関連する新しいタスクを作成します。
+   * 
+   * @param userId ユーザーID
+   * @param request タスク作成リクエストデータ
+   * @return 作成されたタスクのレスポンスデータ
+   */
   public TaskResponse createTask(Long userId, TaskCreateRequest request) {
     validateUserId(userId);
     validateCreateRequest(request);
@@ -26,6 +42,14 @@ public class TasksApplicationService {
     return toResponse(created);
   }
 
+  /**
+   * 指定されたユーザーIDとタスクIDに関連するタスクを更新します。
+   * 
+   * @param userId ユーザーID
+   * @param taskId タスクID
+   * @param request タスク更新リクエストデータ
+   * @return 更新されたタスクのレスポンスデータ
+   */
   public TaskResponse updateTask(Long userId, Long taskId, TaskUpdateRequest request) {
     validateUserId(userId);
     validateTaskId(taskId);
@@ -35,6 +59,12 @@ public class TasksApplicationService {
     return toResponse(updated);
   }
 
+  /**
+   * 指定されたユーザーIDとタスクIDに関連するタスクを削除します。
+   * 
+   * @param userId ユーザーID
+   * @param taskId タスクID
+   */
   public void deleteTask(Long userId, Long taskId) {
     validateUserId(userId);
     validateTaskId(taskId);

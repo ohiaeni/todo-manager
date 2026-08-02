@@ -2,18 +2,19 @@ package com.todomanager.infrastructure;
 
 import com.todomanager.domain.Task;
 import com.todomanager.domain.TaskRepository;
+import lombok.RequiredArgsConstructor;
 import com.todomanager.domain.TaskNotFoundException;
 import com.todomanager.domain.TaskOwnershipException;
 import java.util.List;
 import org.springframework.stereotype.Repository;
 
+/**
+ * JDBCを使用してタスクを管理するリポジトリの実装を表すクラスです。
+ */
 @Repository
+@RequiredArgsConstructor
 public class JdbcTaskRepository implements TaskRepository {
   private final TaskMapper taskMapper;
-
-  public JdbcTaskRepository(TaskMapper taskMapper) {
-    this.taskMapper = taskMapper;
-  }
 
   @Override
   public List<Task> findByUserId(Long userId) {

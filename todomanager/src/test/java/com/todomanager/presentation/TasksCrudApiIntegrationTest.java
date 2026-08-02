@@ -25,80 +25,69 @@ import org.springframework.web.context.WebApplicationContext;
 @Sql(scripts = "classpath:data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class TasksCrudApiIntegrationTest {
 
-    @org.springframework.beans.factory.annotation.Autowired
-    private WebApplicationContext context;
+  @org.springframework.beans.factory.annotation.Autowired
+  private WebApplicationContext context;
 
-    private MockMvc mockMvc;
+  private MockMvc mockMvc;
 
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-    }
+  @BeforeEach
+  void setUp() {
+    mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+  }
 
-    @Test
-    void createsTaskForUser() throws Exception {
-        mockMvc.perform(post("/api/v1/tasks")
-                .header("X-User-Id", "1")
-                .contentType(MediaType.APPLICATION_JSON)
+  @Test
+  void createsTaskForUser() throws Exception {
+    mockMvc
+        .perform(
+            post("/api/v1/tasks").header("X-User-Id", "1").contentType(MediaType.APPLICATION_JSON)
                 .content("{\"title\":\"Add integration test\",\"completed\":false}"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.title").value("Add integration test"))
-                .andExpect(jsonPath("$.completed").value(false));
-    }
+        .andExpect(status().isCreated()).andExpect(jsonPath("$.id").isNumber())
+        .andExpect(jsonPath("$.title").value("Add integration test"))
+        .andExpect(jsonPath("$.completed").value(false));
+  }
 
-    @Test
-    void updatesOwnedTask() throws Exception {
-        mockMvc.perform(put("/api/v1/tasks/1")
-                .header("X-User-Id", "1")
-                .contentType(MediaType.APPLICATION_JSON)
+  @Test
+  void updatesOwnedTask() throws Exception {
+    mockMvc
+        .perform(
+            put("/api/v1/tasks/1").header("X-User-Id", "1").contentType(MediaType.APPLICATION_JSON)
                 .content("{\"title\":\"Buy vegetables\",\"completed\":true}"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.title").value("Buy vegetables"))
-                .andExpect(jsonPath("$.completed").value(true));
-    }
+        .andExpect(status().isOk()).andExpect(jsonPath("$.id").value(1))
+        .andExpect(jsonPath("$.title").value("Buy vegetables"))
+        .andExpect(jsonPath("$.completed").value(true));
+  }
 
-    @Test
-    void deletesOwnedTask() throws Exception {
-        mockMvc.perform(delete("/api/v1/tasks/2")
-                .header("X-User-Id", "1"))
-                .andExpect(status().isNoContent());
+  @Test
+  void deletesOwnedTask() throws Exception {
+    mockMvc.perform(delete("/api/v1/tasks/2").header("X-User-Id", "1"))
+        .andExpect(status().isNoContent());
 
-        mockMvc.perform(get("/api/v1/tasks").header("X-User-Id", "1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)));
-    }
+    mockMvc.perform(get("/api/v1/tasks").header("X-User-Id", "1")).andExpect(status().isOk())
+        .andExpect(jsonPath("$", hasSize(1)));
+  }
 
-    @Test
-    void rejectsUpdatingOtherUsersTask() throws Exception {
-        mockMvc.perform(put("/api/v1/tasks/1")
-                .header("X-User-Id", "2")
-                .contentType(MediaType.APPLICATION_JSON)
+  @Test
+  void rejectsUpdatingOtherUsersTask() throws Exception {
+    mockMvc
+        .perform(
+            put("/api/v1/tasks/1").header("X-User-Id", "2").contentType(MediaType.APPLICATION_JSON)
                 .content("{\"title\":\"Forbidden\",\"completed\":true}"))
-                .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.message").exists());
-    }
+        .andExpect(status().isForbidden()).andExpect(jsonPath("$.message").exists());
+  }
 
-    @Test
-    void rejectsDeletingOtherUsersTask() throws Exception {
-        mockMvc.perform(delete("/api/v1/tasks/1")
-                .header("X-User-Id", "2"))
-                .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.message").exists());
-    }
+  @Test
+  void rejectsDeletingOtherUsersTask() throws Exception {
+    mockMvc.perform(delete("/api/v1/tasks/1").header("X-User-Id", "2"))
+        .andExpect(status().isForbidden()).andExpect(jsonPath("$.message").exists());
+  }
 
-    @Test
-    void returnsOnlyTasksOwnedByUser() throws Exception {
-        mockMvc.perform(get("/api/v1/tasks").header("X-User-Id", "1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[1].id").value(2));
+  @Test
+  void returnsOnlyTasksOwnedByUser() throws Exception {
+    mockMvc.perform(get("/api/v1/tasks").header("X-User-Id", "1")).andExpect(status().isOk())
+        .andExpect(jsonPath("$", hasSize(2))).andExpect(jsonPath("$[0].id").value(1))
+        .andExpect(jsonPath("$[1].id").value(2));
 
-        mockMvc.perform(get("/api/v1/tasks").header("X-User-Id", "2"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id").value(3));
-    }
+    mockMvc.perform(get("/api/v1/tasks").header("X-User-Id", "2")).andExpect(status().isOk())
+        .andExpect(jsonPath("$", hasSize(1))).andExpect(jsonPath("$[0].id").value(3));
+  }
 }

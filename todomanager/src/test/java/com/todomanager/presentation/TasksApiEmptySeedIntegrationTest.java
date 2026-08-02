@@ -19,20 +19,19 @@ import org.springframework.web.context.WebApplicationContext;
 @WebAppConfiguration
 class TasksApiEmptySeedIntegrationTest {
 
-    @Autowired
-    private WebApplicationContext context;
+  @Autowired
+  private WebApplicationContext context;
 
-    private MockMvc mockMvc;
+  private MockMvc mockMvc;
 
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-    }
+  @BeforeEach
+  void setUp() {
+    mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+  }
 
-    @Test
-    void returnsEmptyListFromEndpointWhenSeedRowsAreAbsent() throws Exception {
-        mockMvc.perform(get("/api/v1/tasks").header("X-User-Id", "1"))
-                .andExpect(status().isOk())
-                .andExpect(content().json("[]"));
-    }
+  @Test
+  void returnsEmptyListFromEndpointWhenSeedRowsAreAbsent() throws Exception {
+    mockMvc.perform(get("/api/v1/tasks").header("X-User-Id", "1")).andExpect(status().isOk())
+        .andExpect(content().json("[]"));
+  }
 }

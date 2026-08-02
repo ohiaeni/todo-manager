@@ -7,6 +7,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.stereotype.Repository;
 
+/**
+ * ユーザーリポジトリのインメモリ実装を表すクラスです。
+ */
 @Repository
 public class InMemoryUserRepository implements UserRepository {
   private final Map<Long, User> users = new ConcurrentHashMap<>();
