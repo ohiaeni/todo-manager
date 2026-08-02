@@ -1,4 +1,4 @@
-package com.todomanager.domain;
+package com.todomanager.domain.exception;
 
 /**
  * タスクの所有権に関する例外を表すクラスです。

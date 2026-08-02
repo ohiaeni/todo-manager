@@ -1,7 +1,7 @@
 package com.todomanager.application;
 
 import com.todomanager.domain.Task;
-import com.todomanager.domain.TaskRepository;
+import com.todomanager.domain.repository.TaskRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;

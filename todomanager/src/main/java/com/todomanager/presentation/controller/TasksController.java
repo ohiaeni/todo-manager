@@ -1,4 +1,4 @@
-package com.todomanager.presentation;
+package com.todomanager.presentation.controller;
 
 import com.todomanager.application.TaskCreateRequest;
 import com.todomanager.application.TaskResponse;

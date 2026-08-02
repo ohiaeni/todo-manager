@@ -1,7 +1,8 @@
-package com.todomanager.presentation;
+package com.todomanager.presentation.controller.advice;
 
-import com.todomanager.domain.TaskNotFoundException;
-import com.todomanager.domain.TaskOwnershipException;
+import com.todomanager.domain.exception.TaskNotFoundException;
+import com.todomanager.domain.exception.TaskOwnershipException;
+import com.todomanager.presentation.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

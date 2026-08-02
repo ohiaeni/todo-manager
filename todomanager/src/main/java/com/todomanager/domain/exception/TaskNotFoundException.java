@@ -1,4 +1,4 @@
-package com.todomanager.domain;
+package com.todomanager.domain.exception;
 
 /**
  * タスクが見つからない場合にスローされる例外を表すクラスです。

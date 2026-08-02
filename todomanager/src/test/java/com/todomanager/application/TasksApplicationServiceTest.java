@@ -10,8 +10,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.todomanager.domain.Task;
-import com.todomanager.domain.TaskNotFoundException;
-import com.todomanager.domain.TaskRepository;
+import com.todomanager.domain.exception.TaskNotFoundException;
+import com.todomanager.domain.repository.TaskRepository;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 

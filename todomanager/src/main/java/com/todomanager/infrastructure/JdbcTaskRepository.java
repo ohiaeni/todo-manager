@@ -1,10 +1,10 @@
 package com.todomanager.infrastructure;
 
 import com.todomanager.domain.Task;
-import com.todomanager.domain.TaskRepository;
+import com.todomanager.domain.exception.TaskNotFoundException;
+import com.todomanager.domain.exception.TaskOwnershipException;
+import com.todomanager.domain.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
-import com.todomanager.domain.TaskNotFoundException;
-import com.todomanager.domain.TaskOwnershipException;
 import java.util.List;
 import org.springframework.stereotype.Repository;
 

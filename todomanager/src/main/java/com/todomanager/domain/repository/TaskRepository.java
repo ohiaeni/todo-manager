@@ -1,6 +1,7 @@
-package com.todomanager.domain;
+package com.todomanager.domain.repository;
 
 import java.util.List;
+import com.todomanager.domain.Task;
 
 /**
  * タスクのリポジトリインターフェースを表すクラスです。

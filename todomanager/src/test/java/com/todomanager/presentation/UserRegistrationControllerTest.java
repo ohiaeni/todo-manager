@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.todomanager.application.UserRegistrationRequest;
 import com.todomanager.application.UserRegistrationResponse;
 import com.todomanager.application.UserRegistrationService;
+import com.todomanager.presentation.controller.UserRegistrationController;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

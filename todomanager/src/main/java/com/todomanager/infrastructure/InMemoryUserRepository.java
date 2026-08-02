@@ -1,7 +1,7 @@
 package com.todomanager.infrastructure;
 
 import com.todomanager.domain.User;
-import com.todomanager.domain.UserRepository;
+import com.todomanager.domain.repository.UserRepository;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;

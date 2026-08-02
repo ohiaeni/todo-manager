@@ -1,7 +1,7 @@
 package com.todomanager.application;
 
 import com.todomanager.domain.User;
-import com.todomanager.domain.UserRepository;
+import com.todomanager.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

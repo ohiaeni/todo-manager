@@ -1,4 +1,6 @@
-package com.todomanager.domain;
+package com.todomanager.domain.repository;
+
+import com.todomanager.domain.User;
 
 /**
  * ユーザーリポジトリのインターフェースを表すクラスです。

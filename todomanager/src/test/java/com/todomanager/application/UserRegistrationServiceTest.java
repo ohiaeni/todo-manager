@@ -8,7 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.todomanager.domain.User;
-import com.todomanager.domain.UserRepository;
+import com.todomanager.domain.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 
 class UserRegistrationServiceTest {
