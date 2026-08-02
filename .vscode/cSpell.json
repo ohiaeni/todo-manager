@@ -5,5 +5,13 @@
     "**/gradlew",
     "**/gradlew.bat"
   ],
-  "words": []
+  "words": [
+    "todomanager",
+    "springframework",
+    "integrationtest",
+    "assertj",
+    "mybatis",
+    "ibatis",
+    "hamcrest"
+  ]
 }
