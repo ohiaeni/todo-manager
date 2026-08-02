@@ -17,6 +17,6 @@ class TasksApiEmptySeedIntegrationTest {
 
     @Test
     void returnsEmptyListWhenSeedRowsAreAbsent() throws Exception {
-        assertThat(tasksApplicationService.getTasks()).isEmpty();
+        assertThat(tasksApplicationService.getTasks(1L)).isEmpty();
     }
 }

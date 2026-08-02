@@ -19,9 +19,9 @@ class TasksApiSeededIntegrationTest {
 
     @Test
     void returnsSeededTasksFromSqlInitialization() throws Exception {
-        List<TaskResponse> tasks = tasksApplicationService.getTasks();
+        List<TaskResponse> tasks = tasksApplicationService.getTasks(1L);
 
-        assertThat(tasks).hasSize(3);
+        assertThat(tasks).hasSize(2);
         assertThat(tasks.get(0)).isEqualTo(new TaskResponse(1L, "Buy groceries", false));
     }
 }

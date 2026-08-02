@@ -1,4 +1,4 @@
 package com.todomanager.domain;
 
-public record Task(Long id, String title, boolean completed) {
+public record Task(Long id, Long userId, String title, boolean completed) {
 }

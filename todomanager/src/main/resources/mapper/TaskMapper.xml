@@ -1,9 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.todomanager.infrastructure.TaskMapper">
-    <select id="findAll" resultType="com.todomanager.domain.Task">
-        SELECT id, title, completed
+    <select id="findByUserId" resultType="com.todomanager.domain.Task">
+        SELECT id, user_id, title, completed
         FROM tasks
+        WHERE user_id = #{userId}
         ORDER BY id
     </select>
+
+    <select id="nextId" resultType="long">
+        SELECT COALESCE(MAX(id), 0) + 1
+        FROM tasks
+    </select>
+
+    <insert id="insert">
+        INSERT INTO tasks (id, user_id, title, completed)
+        VALUES (#{id}, #{userId}, #{title}, #{completed})
+    </insert>
+
+    <select id="existsById" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1
+            FROM tasks
+            WHERE id = #{taskId}
+        )
+    </select>
+
+    <select id="findByIdAndUserId" resultType="com.todomanager.domain.Task">
+        SELECT id, user_id, title, completed
+        FROM tasks
+        WHERE id = #{taskId}
+          AND user_id = #{userId}
+    </select>
+
+    <update id="updateByIdAndUserId">
+        UPDATE tasks
+        SET title = #{title},
+            completed = #{completed}
+        WHERE id = #{taskId}
+          AND user_id = #{userId}
+    </update>
+
+    <delete id="deleteByIdAndUserId">
+        DELETE FROM tasks
+        WHERE id = #{taskId}
+          AND user_id = #{userId}
+    </delete>
 </mapper>
